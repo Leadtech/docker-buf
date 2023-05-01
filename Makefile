@@ -21,7 +21,7 @@ export $(shell [ ! -n "$(ENV_FILE)" ] || cat $(ENV_FILE) | grep -v \
 GIT_COMMIT ?= $(shell cut -c-8 <<< `git rev-parse HEAD`)
 BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 GIT_REPO ?= $(shell git remote get-url origin)
-#UNCOMMITTED_CHANGES := $(shell git status --porcelain)
+UNCOMMITTED_CHANGES := $(shell git status --porcelain)
 
 help: ## Show available targets
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m PHP_VERSION<[a-z.-]+> (default: 7.2.34) \n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
