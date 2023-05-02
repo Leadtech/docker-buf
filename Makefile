@@ -2,13 +2,10 @@ ifneq (,)
   $(error This Makefile requires GNU Make. )
 endif
 
-#SHELL := bash
-.PHONY: login all build push
+.PHONY: help login build push shell
 .DEFAULT_GOAL      := help
 DOCKER_BIN         ?= docker
-PROTOC_VERSION     ?= 21.12
 DOCKER_IMAGE       ?= leadtech/buf
-IMAGE_VERSION      ?= 0.0.1
 DOCKER_FILE        ?= Dockerfile
 DOCKER_BUILD_FLAGS ?=
 DOCKER_BUILD_PATH  ?= $(PWD)
@@ -24,7 +21,7 @@ GIT_REPO ?= $(shell git remote get-url origin)
 UNCOMMITTED_CHANGES := $(shell git status --porcelain)
 
 help: ## Show available targets
-	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m PHP_VERSION<[a-z.-]+> (default: 7.2.34) \n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m \n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 login:  ## Login to docker registry
 	$(DOCKER_BIN) login -u $(DOCKER_USER)
