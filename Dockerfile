@@ -5,6 +5,7 @@ ENV BUF_VERSION=v1.16.0 \
     PROTOC_INSTALL_VERSIONS="21.12 22.2" \
     DEFAULT_PROTOC_VERSION=22.2 \
     PROTOC_HOME=/opt/protoc \
+    ENTRYPOINT_INIT_SCRIPT_DIR=/opt/docker/init \
     # Configure Golang
     GOROOT=/opt/go \
     GOPATH=/opt/go/packages
@@ -44,16 +45,18 @@ ADD .docker /opt/docker
 
 RUN chmod ug+x /opt/docker/entrypoint.sh \
     # Make sure go binaries are executable
-    /opt/docker/init \
+    ${ENTRYPOINT_INIT_SCRIPT_DIR} \
     # Make sure go binaries are executable
     $GOROOT/bin \
     $GOPATH/bin -R \
     # Pre-install protoc releases
-    && /opt/docker/init/5-install-protoc.sh
+    && ${ENTRYPOINT_INIT_SCRIPT_DIR}/5-install-protoc.sh
 
 # If you extend this image, don't override the entrypoint.
-# Instead add your startup scripts to /opt/docker/init/
+# Instead add your startup scripts to ${ENTRYPOINT_INIT_SCRIPT_DIR}/
+# Please start counting at 100, to avoid conflicts with the base image.
 # The scripts are sorted, so you can suffix the files to control the execution order.
 # Startup scripts must have the *.sh file extension.
 ENTRYPOINT ["/opt/docker/entrypoint.sh"]
+
 CMD ["/bin/bash"]

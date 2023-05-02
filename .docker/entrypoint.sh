@@ -22,7 +22,7 @@ fi
 # The scripts are sorted. To determine the execution order, simply prefix the script with a number.
 # For example: 1-first-script.sh, 2-second-script.sh etc.
 #
-scripts=$(find "/opt/docker/init" -name '*.sh' | sort)
+scripts=$(find "${ENTRYPOINT_INIT_SCRIPT_DIR:-/opt/docker/init}" -name '*.sh' | sort)
 for script in $scripts; do
   bash "$script"
 done
